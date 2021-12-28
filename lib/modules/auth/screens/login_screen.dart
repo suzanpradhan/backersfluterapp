@@ -3,33 +3,34 @@ import 'dart:ui';
 import 'package:backersapp/constants/assets_path.dart';
 import 'package:backersapp/constants/custom_colors.dart';
 import 'package:backersapp/constants/enums/auth_text_types.dart';
-import 'package:backersapp/modules/auth/blocs/register/register_bloc.dart';
+import 'package:backersapp/modules/auth/blocs/login/login_bloc.dart';
+import 'package:backersapp/modules/auth/screens/register_screen.dart';
 import 'package:backersapp/widgets/auth_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final FocusNode _usernameNode = FocusNode();
-  final FocusNode _emailNode = FocusNode();
-  final FocusNode _passwordNode = FocusNode();
+class _LoginScreenState extends State<LoginScreen> {
+  FocusNode focusNodeUserName = FocusNode();
+  FocusNode focusNodePassword = FocusNode();
+
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // final LoginBloc _loginBloc = LoginBloc();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterBloc(
-          emailController: _emailController,
-          passowrdController: _passwordController,
-          usernameController: _usernameController),
+      create: (context) => LoginBloc(
+          usernameController: _usernameController,
+          passowrdController: _usernameController),
       child: Scaffold(
         backgroundColor: CustomColors.darkBlue,
         body: Stack(
@@ -69,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     height: 20,
                                   ),
                                   const Text(
-                                    "Create Account",
+                                    "Sign In",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: "FFMarkBlack",
@@ -79,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  BlocBuilder<RegisterBloc, RegisterState>(
+                                  BlocBuilder<LoginBloc, LoginState>(
                                     builder: (context, state) {
                                       return Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -87,23 +88,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           child: AuthTextField(
                                               textEditingController:
                                                   _usernameController,
-                                              focusNode: _usernameNode,
+                                              focusNode: focusNodeUserName,
+                                              hintText: "Username",
+                                              errorMessage: (state
+                                                          is LoginFormErrorState &&
+                                                      !state.hasUsernameError())
+                                                  ? state.usernameError
+                                                  : null,
                                               onChanged: (value) {
-                                                BlocProvider.of<RegisterBloc>(
+                                                BlocProvider.of<LoginBloc>(
                                                         context)
                                                     .add(UsernameValidate(
                                                         errorState: (state
-                                                                is RegisterFormErrorState)
+                                                                is LoginFormErrorState)
                                                             ? state
                                                             : null,
                                                         username: value));
                                               },
-                                              errorMessage: (state
-                                                          is RegisterFormErrorState &&
-                                                      !state.hasUsernameError())
-                                                  ? state.usernameError
-                                                  : null,
-                                              hintText: "Username",
                                               authTextTypes:
                                                   AuthTextTypes.username));
                                     },
@@ -111,40 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   const SizedBox(
                                     height: 14,
                                   ),
-                                  BlocBuilder<RegisterBloc, RegisterState>(
-                                    builder: (context, state) {
-                                      return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 24),
-                                          child: AuthTextField(
-                                              textEditingController:
-                                                  _emailController,
-                                              focusNode: _emailNode,
-                                              onChanged: (value) {
-                                                BlocProvider.of<RegisterBloc>(
-                                                        context)
-                                                    .add(EmailValidate(
-                                                        errorState: (state
-                                                                is RegisterFormErrorState)
-                                                            ? state
-                                                            : null,
-                                                        emailAddress: value));
-                                              },
-                                              errorMessage: (state
-                                                          is RegisterFormErrorState &&
-                                                      !state
-                                                          .hasEmailAddressError())
-                                                  ? state.emailAddressError
-                                                  : null,
-                                              hintText: "Email Address",
-                                              authTextTypes:
-                                                  AuthTextTypes.emailAddress));
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 14,
-                                  ),
-                                  BlocBuilder<RegisterBloc, RegisterState>(
+                                  BlocBuilder<LoginBloc, LoginState>(
                                     builder: (context, state) {
                                       return Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -152,26 +120,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           child: AuthTextField(
                                               textEditingController:
                                                   _passwordController,
-                                              focusNode: _passwordNode,
+                                              focusNode: focusNodePassword,
+                                              hintText: "Password",
+                                              errorMessage: (state
+                                                          is LoginFormErrorState &&
+                                                      !state.hasPasswordError())
+                                                  ? state.passwordError
+                                                  : null,
                                               onChanged: (value) {
-                                                BlocProvider.of<RegisterBloc>(
+                                                BlocProvider.of<LoginBloc>(
                                                         context)
                                                     .add(PasswordValidate(
                                                         errorState: (state
-                                                                is RegisterFormErrorState)
+                                                                is LoginFormErrorState)
                                                             ? state
                                                             : null,
                                                         password: value));
                                               },
-                                              errorMessage: (state
-                                                          is RegisterFormErrorState &&
-                                                      !state.hasPasswordError())
-                                                  ? state.passwordError
-                                                  : null,
-                                              hintText: "Password",
                                               authTextTypes:
                                                   AuthTextTypes.password));
                                     },
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 24),
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Text(
+                                            "Can't Sign In?".toUpperCase(),
+                                            style: const TextStyle(
+                                                color:
+                                                    CustomColors.darkBlueShade,
+                                                fontFamily: "FFMarkRegular",
+                                                fontSize: 12)),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 14,
@@ -219,7 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   const SizedBox(
                                     height: 38,
                                   ),
-                                  BlocBuilder<RegisterBloc, RegisterState>(
+                                  BlocBuilder<LoginBloc, LoginState>(
                                     builder: (context, state) {
                                       return InkWell(
                                         onTap: () {},
@@ -231,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               border: Border.all(
                                                   width: 1,
                                                   color: (state
-                                                          is RegisterFormValidated)
+                                                          is LoginFormValidated)
                                                       ? CustomColors.greenAccent
                                                       : CustomColors
                                                           .darkBlueShade),
@@ -239,8 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   BorderRadius.circular(14)),
                                           child: Icon(
                                             Icons.arrow_forward,
-                                            color: (state
-                                                    is RegisterFormValidated)
+                                            color: (state is LoginFormValidated)
                                                 ? CustomColors.greenAccent
                                                 : CustomColors.darkBlueShade,
                                           ),
@@ -253,7 +239,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) =>
+                                                const RegisterScreen()),
+                                      );
                                     },
                                     highlightColor: Colors.transparent,
                                     splashColor: Colors.transparent,
@@ -261,8 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 14),
                                       child: Text(
-                                          "Already have an account?"
-                                              .toUpperCase(),
+                                          "Create Account".toUpperCase(),
                                           style: const TextStyle(
                                             color: CustomColors.darkBlueShade,
                                             fontFamily: "FFMarkMedium",
@@ -289,7 +279,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   child: Text(
                     "Terms and Conditions".toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: CustomColors.darkBlueShade,
                         fontFamily: "FFMarkMedium",
                         fontSize: 14),

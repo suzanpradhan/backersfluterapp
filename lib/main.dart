@@ -1,3 +1,4 @@
+import 'package:backersapp/modules/auth/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,26 +15,7 @@ class AppStarter extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const TestPage(),
+      home: const SplashScreen(),
     );
-  }
-}
-
-class TestPage extends StatefulWidget {
-  const TestPage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<TestPage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<TestPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Center(
-      child: Text("Backers"),
-    ));
   }
 }
