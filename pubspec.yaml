@@ -30,8 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  bloc: ^8.0.1
-  flutter_bloc: ^8.0.0
+  bloc: ^8.0.2
+  flutter_bloc: ^8.0.1
   hydrated_bloc: ^8.0.0
   replay_bloc: ^0.2.1
   rx_bloc: ^3.2.0

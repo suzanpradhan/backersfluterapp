@@ -20,8 +20,8 @@ This project is structured based on the module architecture. Here are the naviga
 
 All the external libraries used in the project are listed here. Any new future libraries will be also listed.
 
-- [bloc: ^8.0.1](https://pub.dev/packages/bloc)
-- [flutter_bloc: ^8.0.0](https://pub.dev/packages/flutter_bloc)
+- [bloc: ^8.0.2](https://pub.dev/packages/bloc)
+- [flutter_bloc: ^8.0.1](https://pub.dev/packages/flutter_bloc)
 - [hydrated_bloc: ^8.0.0](https://pub.dev/packages/hydrated_bloc)
 - [replay_bloc: ^0.2.1](https://pub.dev/packages/replay_bloc)
 - [rx_bloc: ^3.2.0](https://pub.dev/packages/rx_bloc)
