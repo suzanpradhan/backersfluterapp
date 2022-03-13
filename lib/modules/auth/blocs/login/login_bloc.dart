@@ -1,3 +1,6 @@
+import 'package:backersapp/modules/auth/models/user_model.dart';
+import 'package:backersapp/modules/auth/repos/auth_repo.dart';
+import 'package:backersapp/modules/auth/services/secure_storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +11,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final TextEditingController usernameController;
   final TextEditingController passowrdController;
+  final AuthRepo _authRepo = AuthRepo();
 
   LoginBloc(
       {required this.passowrdController, required this.usernameController})
@@ -17,6 +21,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         username: event.username, errorState: event.errorState, emit: emit));
     on<PasswordValidate>((event, emit) => validatePassword(
         password: event.password, errorState: event.errorState, emit: emit));
+    on<LoginFormSubmit>(
+        (event, emit) => attemptLogin(userModel: event.userModel, emit: emit));
   }
 
   validateUsername(
@@ -78,6 +84,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           passowrdController.text != "") {
         emit(LoginFormValidated());
       }
+    }
+  }
+
+  attemptLogin(
+      {required UserModel userModel, required Emitter<LoginState> emit}) async {
+    emit(LoginAttemptLoadingState());
+    try {
+      UserModel userWithToken =
+          await _authRepo.loginService(userModel: userModel);
+      if (userWithToken.accessToken != null) {
+        final isSavedTokenLocally = await SecureStorage()
+            .storeTokenLocally(token: userWithToken.accessToken!);
+        emit(const UserLoggedInState(message: "Logged in successfully."));
+      } else {
+        emit(UserLoggedInFailedState(message: "Server Error!"));
+      }
+    } catch (e) {
+      print("here");
+      emit(UserLoggedInFailedState(message: e.toString()));
+      emit(LoginFormValidated());
     }
   }
 }

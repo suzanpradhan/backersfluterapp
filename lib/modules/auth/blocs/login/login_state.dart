@@ -23,3 +23,19 @@ class LoginFormErrorState extends LoginState {
 }
 
 class LoginFormValidated extends LoginState {}
+
+class LoginAttemptLoadingState extends LoginState {}
+
+class UserLoggedInState extends LoginState {
+  final String message;
+  const UserLoggedInState({required this.message});
+  @override
+  List<Object?> get props => [message];
+}
+
+class UserLoggedInFailedState extends LoginState {
+  final String message;
+  const UserLoggedInFailedState({required this.message});
+  @override
+  List<Object?> get props => [message];
+}

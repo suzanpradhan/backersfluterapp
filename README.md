@@ -27,4 +27,5 @@ All the external libraries used in the project are listed here. Any new future l
 - [rx_bloc: ^3.2.0](https://pub.dev/packages/rx_bloc)
 - [flutter_rx_bloc: ^4.0.0](https://pub.dev/packages/flutter_rx_bloc)
 - [equatable: ^2.0.3](https://pub.dev/packages/equatable)
+- [eva_icons_flutter: ^3.0.2](https://pub.dev/packages/eva_icons_flutter)
 

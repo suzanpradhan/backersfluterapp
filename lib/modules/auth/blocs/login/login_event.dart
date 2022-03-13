@@ -8,12 +8,11 @@ abstract class LoginEvent extends Equatable {
 }
 
 class LoginFormSubmit extends LoginEvent {
-  final String username;
-  final String password;
+  final UserModel userModel;
 
-  const LoginFormSubmit({required this.username, required this.password});
+  const LoginFormSubmit({required this.userModel});
   @override
-  List<Object> get props => [username, password];
+  List<Object> get props => [userModel];
 }
 
 class UsernameValidate extends LoginEvent {

@@ -1,3 +1,5 @@
+import 'package:backersapp/modules/auth/models/user_model.dart';
+import 'package:backersapp/modules/auth/repos/auth_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +11,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final TextEditingController usernameController;
   final TextEditingController passowrdController;
   final TextEditingController emailController;
+  final AuthRepo _authRepo = AuthRepo();
   RegisterBloc(
       {required this.emailController,
       required this.passowrdController,
@@ -23,6 +26,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         errorState: event.errorState));
     on<PasswordValidate>((event, emit) => validatePassword(
         emit: emit, password: event.password, errorState: event.errorState));
+    on<RegisterFormSubmitted>((event, emit) =>
+        attemptRegister(emit: emit, userModel: event.userModel));
   }
 
   validateUsername(
@@ -135,6 +140,23 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           passowrdController.text != "") {
         emit(RegisterFormValidated());
       }
+    }
+  }
+
+  attemptRegister(
+      {required UserModel userModel,
+      required Emitter<RegisterState> emit}) async {
+    emit(RegisterAttemptLoadingState());
+    try {
+      UserModel userWithToken =
+          await _authRepo.registerService(userModel: userModel);
+      emit(const UserRegisteredState(
+          message:
+              "You have been registered. Login to continue your account."));
+    } catch (e) {
+      print("here");
+      emit(UserRegisterFailedState(message: e.toString()));
+      emit(RegisterFormValidated());
     }
   }
 }

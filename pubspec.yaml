@@ -37,6 +37,12 @@ dependencies:
   rx_bloc: ^3.2.0
   flutter_rx_bloc: ^4.0.0
   equatable: ^2.0.3
+  eva_icons_flutter: ^3.0.2
+  http: ^0.13.4
+  image_picker: ^0.8.4+10
+  dio: ^4.0.4
+  flutter_secure_storage: ^5.0.2
+  pull_to_refresh: ^2.0.0
 
 
 
@@ -76,6 +82,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/tests/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

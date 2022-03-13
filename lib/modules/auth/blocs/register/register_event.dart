@@ -31,3 +31,12 @@ class PasswordValidate extends RegisterEvent {
   @override
   List<Object?> get props => [password, errorState];
 }
+
+class RegisterFormSubmitted extends RegisterEvent {
+  final UserModel userModel;
+
+  const RegisterFormSubmitted({required this.userModel});
+
+  @override
+  List<Object?> get props => [userModel];
+}
